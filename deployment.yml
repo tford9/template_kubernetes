@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-container
+spec:
+#  activeDeadlineSeconds: 1800  # Pod terminates after 30 min
+  securityContext:
+    runAsUser: 260433 # run id command in terminal to get your UID
+  containers:
+    - name: example-container
+      image: ghcr.io/location/your_image_name:tag  # image name
+      resources:
+        requests: # minimum resources
+          memory: "16Gi"
+          cpu: "8"
+        limits: # maximum resources
+          memory: "24Gi"
+          cpu: "16"
+      volumeMounts:
+      - name: home
+        mountPath: "/app"
+      command: ["/bin/sh"]
+      stdin: true
+      tty: true
+  volumes:
+  - name: home
+    nfs:
+      server: 128.239.56.166
+      path: /sciclone/home/your_username/repos/your_repo_name
+  imagePullSecrets:
+  - name: ghcr-secret

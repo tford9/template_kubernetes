@@ -1,0 +1,37 @@
+name: Update Kubernetes YAML
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  update-k8s:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Step 1: Checkout the repository
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # Step 2: Extract the GitHub SHA for tagging
+    - name: Get short SHA
+      id: get_sha
+      run: echo "::set-output name=sha::$(echo ${GITHUB_SHA} | cut -c1-7)"
+
+    # Step 3: Update the Kubernetes YAML file
+    - name: Update Kubernetes YAML
+      run: |
+        IMAGE_NAME=ghcr.io/${{ github.repository }}:${{ steps.get_sha.outputs.sha }}
+        echo "Updating deployment.yml with image $IMAGE_NAME"
+        sed -i "s|image: ghcr.io/.*|image: $IMAGE_NAME|g" path/to/deployment.yml
+
+    # Step 4: Commit changes
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email "actions@github.com"
+        git add path/to/deployment.yml
+        git commit -m "Update Kubernetes YAML with image ${{ steps.get_sha.outputs.sha }}"
+        git push
