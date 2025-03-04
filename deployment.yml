@@ -27,4 +27,4 @@ spec:
   - name: home
     nfs:
       server: 128.239.56.166
-      path: /sciclone/home/twford/repos/today_in_class
+      path: /sciclone/home/twford/repos/template_kubernetes
