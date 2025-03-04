@@ -1,14 +1,15 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: example-container
+  name: in-class
 spec:
 #  activeDeadlineSeconds: 1800  # Pod terminates after 30 min
   securityContext:
     runAsUser: 260433 # run id command in terminal to get your UID
+    runAsGroup: 50038
   containers:
-    - name: example-container
-      image: ghcr.io/location/your_image_name:tag  # image name
+    - name: in-class
+      image: ghcr.io/tford9/template_kubernetes:main  # image name
       resources:
         requests: # minimum resources
           memory: "16Gi"
@@ -26,6 +27,4 @@ spec:
   - name: home
     nfs:
       server: 128.239.56.166
-      path: /sciclone/home/your_username/repos/your_repo_name
-  imagePullSecrets:
-  - name: ghcr-secret
+      path: /sciclone/home/twford/repos/today_in_class
